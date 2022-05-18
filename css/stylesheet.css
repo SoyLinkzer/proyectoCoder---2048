@@ -1,0 +1,45 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+h1{
+    text-align: center;
+    color: #b0b0b0;
+}
+#principal{
+    display: flex;
+    justify-content: center;
+}
+#pantalla{
+    height: 270px;
+    width: 270px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #b0b0b0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.casilla{
+    height: 50px;
+    width: 50px;
+    margin: 5px 5px 5px 5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #b0b0b0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #838383;
+    background-color: #dadada;
+}
+#interfaz{
+    margin-left: 20px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #b0b0b0;
+    padding: 10px 10px 10px 10px;
+    color: #838383;
+}
+#jugador-nombre{
+    margin-bottom: 50%;
+}
