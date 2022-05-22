@@ -75,3 +75,13 @@ do{
     }
     actualizarPuntuacion();
 }while(eleccion !== 'salir');
+
+let cadenaPrueba = [2,0,0,2];
+let cadenaPrueba2 = [2,0,0,8];
+let cadenaPrueba3 = [2,0,8,2];
+let cadenaPrueba4 = [2,2,2,8];
+
+console.log(sumarArrayAIzquierda(cadenaPrueba));
+console.log(sumarArrayAIzquierda(cadenaPrueba2));
+console.log(sumarArrayAIzquierda(cadenaPrueba3));
+console.log(sumarArrayAIzquierda(cadenaPrueba4));
