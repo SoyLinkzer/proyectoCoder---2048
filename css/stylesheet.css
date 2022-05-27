@@ -29,7 +29,8 @@ h1{
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #838383;
+    color: #1268e9;
+    font-weight: bold;
     background-color: #dadada;
 }
 #interfaz{
