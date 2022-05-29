@@ -13,14 +13,25 @@ class casilla {
         this.casillaHTML.innerText = this.valor;
     }
 }
-  
+
+
+
+
+/*---------Declaracion e inicializacion de las variables principales---------*/
+
 //defino el tamaño de la matriz
 const LADO = 4;
+//defino variables de usuario
 let puntuacion = 0;
-
+let usuarioLS = localStorage.getItem('jugador');
+let nombreUsuario = usuarioLS? usuarioLS.nombre : 'Default';
+const dataUsuario = {nombre: nombreUsuario, puntuacion: puntuacion};
+//Defino elementos html
 let pantallaHTML = document.getElementById("pantalla");
 let puntuacionHTML = document.getElementById("puntuacion");
-
+let btnUsuarioHTML = document.getElementById("botonUsuario");
+let inputUsuarioHTML = document.getElementById("nombreUsuario")
+let interfazHTML = document.getElementById("interfaz");
 //inicializar matriz de casillas
 let casillas = [];
 for(let i = 0; i<LADO; i++){
@@ -32,7 +43,10 @@ for(let i = 0; i<LADO; i++){
     }
 }
 
-//console.log(casillas);
+
+
+
+/* ------------------- Funciones ------------------------ */
 
 const sumarArrayAIzquierda = (cadena)=>{
     /*
@@ -130,34 +144,45 @@ const calcularPuntuacion = (matrizASumar)=>{
 }
 
 const actualizarPuntuacion = (matriz,elementoHTML)=>{
-    elementoHTML.innerText = `Puntuacion: ${calcularPuntuacion(matriz)}`;
+    let puntosTotales = calcularPuntuacion(matriz);
+    elementoHTML.innerText = `Puntuacion: ${puntosTotales}`;
+    dataUsuario.puntuacion = puntosTotales;
+    console.log(dataUsuario);
+    guardarLocal(dataUsuario,"jugador");
 };
 
 const getRandomInt = (min, max)=>{
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+const eliminarVacios = (matriz)=>{
+    let lastIndex = -1;
+    for(let i = 0; i<matriz.length; i++){
+        if(matriz[i].length===0){matriz[i] = 0}
+    }
+    do{
+        lastIndex = matriz.lastIndexOf(0);
+        if(lastIndex !== -1) matriz.splice(lastIndex,1);
+    }while(lastIndex != -1);
+    return matriz;
+};
+
 const aparecerRandom = (matriz)=>{
     let arrayAux; 
     let casillaAux;
+    let index;
     //Obtengo solo filas con valores = 0
     matriz = matriz.map(fila=>{
         return fila.filter(columna=>(columna.valor === 0));
     });
-    matriz += matriz.forEach(fila=>{
-        return 
-    });
-    console.log(matriz);
-    if(matriz != [[],[],[],[]]){
+    matriz = eliminarVacios(matriz);
+    if(matriz.length !== 0){
         arrayAux = matriz[getRandomInt(0,matriz.length)];
         casillaAux = arrayAux[getRandomInt(0,arrayAux.length)];
-        console.log(casillaAux);
-        console.log(casillaAux.valor);
         casillaAux.valor = 2;
         casillaAux.actualizarCasilla();
-        console.log(casillaAux.posicion);
     }else{
-        alert("Perdiste :c");
+        alert("Perdiste...");
     }
 };
 
@@ -167,15 +192,30 @@ const actualizarTotal = (matrizAActualizar,elementoHTML)=>{
     aparecerRandom(matrizAActualizar);
 };
 
-//Algunas pruebas
-//let matrizDePrueba = [[1,2,3,4],[4,3,2,1],[5,6,7,8],[8,7,6,5]];
-//console.log(filasAColumnas(matrizDePrueba));
-//console.log(casillasEjemplo);
-//console.log(moverCasillas(casillasEjemplo));
+const guardarLocal = (objeto,campo)=>{
+    localStorage.setItem(campo, JSON.stringify(objeto));
+};
+
+actualizarUsuario = (e)=>{
+    let parrafoUsuario = document.createElement('p');
+    let hrHTML = document.getElementById('separador');
+    dataUsuario.nombre = inputUsuarioHTML.value;
+    interfazHTML.insertBefore(parrafoUsuario,hrHTML);
+    parrafoUsuario.innerText = dataUsuario.nombre;
+    inputUsuarioHTML.remove();
+    btnUsuarioHTML.remove();
+    guardarLocal(dataUsuario,"jugador");
+};
+
+/*-----------------------------"Ciclo" de juego-----------------------------*/
+
+if(dataUsuario.nombre !== 'Default'){actualizarUsuario()}
 
 let casillasNumAux;
 
 aparecerRandom(casillas);
+
+btnUsuarioHTML.addEventListener('click',actualizarUsuario);
 
 document.addEventListener('keydown',(t)=>{
     switch(t.key){

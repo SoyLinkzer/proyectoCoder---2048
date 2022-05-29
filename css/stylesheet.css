@@ -41,6 +41,12 @@ h1{
     padding: 10px 10px 10px 10px;
     color: #838383;
 }
+#interfaz p{
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    color: #838383;
+}
 #jugador-nombre{
     margin-bottom: 50%;
 }
