@@ -23,9 +23,11 @@ class casilla {
 const LADO = 4;
 //defino variables de usuario
 let puntuacion = 0;
-let usuarioLS = localStorage.getItem('jugador');
-let nombreUsuario = usuarioLS? usuarioLS.nombre : 'Default';
+let usuarioLS = JSON.parse(localStorage.getItem('jugador'));
+if(usuarioLS){console.log(true)}else{console.log(false)}
+let nombreUsuario = usuarioLS != null ? usuarioLS.nombre : 'Default' ;
 const dataUsuario = {nombre: nombreUsuario, puntuacion: puntuacion};
+console.log(dataUsuario);
 //Defino elementos html
 let pantallaHTML = document.getElementById("pantalla");
 let puntuacionHTML = document.getElementById("puntuacion");
@@ -196,16 +198,23 @@ const guardarLocal = (objeto,campo)=>{
     localStorage.setItem(campo, JSON.stringify(objeto));
 };
 
-actualizarUsuario = (e)=>{
+const actualizarUsuario = (e)=>{
+    if(dataUsuario === 'Default'){dataUsuario.nombre = inputUsuarioHTML.value;}
+    console.log(dataUsuario);
     let parrafoUsuario = document.createElement('p');
     let hrHTML = document.getElementById('separador');
     dataUsuario.nombre = inputUsuarioHTML.value;
     interfazHTML.insertBefore(parrafoUsuario,hrHTML);
-    parrafoUsuario.innerText = dataUsuario.nombre;
+    let value = dataUsuario.nombre;
+    console.log(usuarioLS);
+    parrafoUsuario.innerHTML = `<div>${value}</div>`;
+    console.log(dataUsuario);
     inputUsuarioHTML.remove();
     btnUsuarioHTML.remove();
+    console.log(dataUsuario);
     guardarLocal(dataUsuario,"jugador");
 };
+
 
 /*-----------------------------"Ciclo" de juego-----------------------------*/
 
@@ -213,6 +222,7 @@ if(dataUsuario.nombre !== 'Default'){actualizarUsuario()}
 
 let casillasNumAux;
 
+aparecerRandom(casillas);
 aparecerRandom(casillas);
 
 btnUsuarioHTML.addEventListener('click',actualizarUsuario);
