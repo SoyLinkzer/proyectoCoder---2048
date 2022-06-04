@@ -1,6 +1,6 @@
 class casilla {
     constructor(valor,posicion,casillaHTML){
-        this.valor = valor;
+        this.valor = Number(valor);
         this.posicion = posicion;
         this.casillaHTML = casillaHTML;
     }
@@ -24,10 +24,8 @@ const LADO = 4;
 //defino variables de usuario
 let puntuacion = 0;
 let usuarioLS = JSON.parse(localStorage.getItem('jugador'));
-if(usuarioLS){console.log(true)}else{console.log(false)}
 let nombreUsuario = usuarioLS != null ? usuarioLS.nombre : 'Default' ;
 const dataUsuario = {nombre: nombreUsuario, puntuacion: puntuacion};
-console.log(dataUsuario);
 //Defino elementos html
 let pantallaHTML = document.getElementById("pantalla");
 let puntuacionHTML = document.getElementById("puntuacion");
@@ -157,6 +155,7 @@ const getRandomInt = (min, max)=>{
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+//elimine los campos vacios de los arrays de la matriz
 const eliminarVacios = (matriz)=>{
     let lastIndex = -1;
     for(let i = 0; i<matriz.length; i++){
@@ -169,10 +168,36 @@ const eliminarVacios = (matriz)=>{
     return matriz;
 };
 
+const isWin = (matriz)=>{
+    let hayGanador = false;
+    for(let i = 0; i<matriz.length; i++){
+        if(matriz[i].includes(2048)){ 
+            hayGanador = true; 
+            break;
+        };
+    }
+    return hayGanador;
+};
+
+const mostrarAlertaFin = (titulo,texto,icono)=>{
+    Swal.fire({
+        title: titulo, 
+        text: texto, 
+        icon: icono, 
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload()
+        }
+      });
+};
+
 const aparecerRandom = (matriz)=>{
     let arrayAux; 
     let casillaAux;
-    let index;
     //Obtengo solo filas con valores = 0
     matriz = matriz.map(fila=>{
         return fila.filter(columna=>(columna.valor === 0));
@@ -184,14 +209,19 @@ const aparecerRandom = (matriz)=>{
         casillaAux.valor = 2;
         casillaAux.actualizarCasilla();
     }else{
-        alert("Perdiste...");
+        mostrarAlertaFin('Perdiste :(','Volver a jugar?', 'error');
     }
 };
 
 const actualizarTotal = (matrizAActualizar,elementoHTML)=>{
     actualizarCasillasHTML(matrizAActualizar);
     actualizarPuntuacion(matrizAActualizar,elementoHTML);
-    aparecerRandom(matrizAActualizar);
+    console.log(isWin(matrizAActualizar));
+    if(isWin(mObjetosToMNumeros(matrizAActualizar))){
+        mostrarAlertaFin('Ganaste!','Volver a jugar?', 'success');
+    }else{
+        aparecerRandom(matrizAActualizar);
+    }
 };
 
 const guardarLocal = (objeto,campo)=>{
@@ -200,20 +230,19 @@ const guardarLocal = (objeto,campo)=>{
 
 const actualizarUsuario = (e)=>{
     if(dataUsuario === 'Default'){dataUsuario.nombre = inputUsuarioHTML.value;}
-    console.log(dataUsuario);
     let parrafoUsuario = document.createElement('p');
     let hrHTML = document.getElementById('separador');
     dataUsuario.nombre = inputUsuarioHTML.value;
     interfazHTML.insertBefore(parrafoUsuario,hrHTML);
     let value = dataUsuario.nombre;
-    console.log(usuarioLS);
     parrafoUsuario.innerHTML = `<div>${value}</div>`;
-    console.log(dataUsuario);
     inputUsuarioHTML.remove();
     btnUsuarioHTML.remove();
-    console.log(dataUsuario);
+    //console.log(dataUsuario);
     guardarLocal(dataUsuario,"jugador");
 };
+
+
 
 
 /*-----------------------------"Ciclo" de juego-----------------------------*/
