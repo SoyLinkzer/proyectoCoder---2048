@@ -32,6 +32,8 @@ let puntuacionHTML = document.getElementById("puntuacion");
 let btnUsuarioHTML = document.getElementById("botonUsuario");
 let inputUsuarioHTML = document.getElementById("nombreUsuario")
 let interfazHTML = document.getElementById("interfaz");
+let btnTopHTML = document.getElementById("botonTop");
+let footer = document.getElementById('adicional');
 //inicializar matriz de casillas
 let casillas = [];
 for(let i = 0; i<LADO; i++){
@@ -42,7 +44,6 @@ for(let i = 0; i<LADO; i++){
         casillas[i][j].dibujarse(pantallaHTML,'casilla');
     }
 }
-
 
 
 
@@ -242,7 +243,33 @@ const actualizarUsuario = (e)=>{
     guardarLocal(dataUsuario,"jugador");
 };
 
+const ordenarPorPosicion = (objetosConPocision)=>{
+    objetosOrdenados = [];
+    for(i = 0; i < objetosConPocision.length ; i++){
+        objetosConPocision.forEach(obj=>{
+            if(obj.posicion === (i+1)) objetosOrdenados.push(obj); 
+        });
+    }
+    return objetosOrdenados;
+};
 
+const mostrarTop = (elementoHTML)=>{
+    fetch('/top_jugadores.json')
+    .then(res=> res.json())
+    .then( jugadores=>{
+        let jugadoresOrdenados = ordenarPorPosicion(jugadores);
+        jugadoresOrdenados.forEach(jugador =>{
+            const div = document.createElement('div');
+            div = document.className = 
+            div.innerHTML = `
+            <h3>#${jugador.posicion}</h3>
+            <h4>${jugador.jugador}</h4>
+            <p>${jugador.puntuacion}</p>
+            `;
+            elementoHTML.append(div);
+        });
+    } );
+};
 
 
 /*-----------------------------"Ciclo" de juego-----------------------------*/
@@ -255,6 +282,12 @@ aparecerRandom(casillas);
 aparecerRandom(casillas);
 
 btnUsuarioHTML.addEventListener('click',actualizarUsuario);
+btnTopHTML.addEventListener('click',()=>{
+    listaJugadores = document.createElement('div');
+    listaJugadores.innerHTML = `<p text-aling="center"> Top de jugadores</p>`
+    footer.appendChild(listaJugadores);
+    mostrarTop(listaJugadores);
+});
 
 document.addEventListener('keydown',(t)=>{
     switch(t.key){

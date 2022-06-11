@@ -1,0 +1,36 @@
+[
+    {
+        "id":1,
+        "jugador" : "MXI",
+        "puntuacion": 6428,
+        "posicion" : 2,
+        "2048": false
+    },
+    {
+        "id":2,
+        "jugador" : "JJ",
+        "puntuacion": 4822,
+        "posicion" : 4,
+        "2048": false
+    },
+    {
+        "id":3,
+        "jugador" : "NMI",
+        "puntuacion": 3403,
+        "posicion" : 3,
+        "2048": false
+    },
+    {
+        "id":4,
+        "jugador" : "WKST",
+        "puntuacion": 1220,
+        "posicion" : 5,
+        "2048": false
+    },{
+        "id":5,
+        "jugador" : "ACDC",
+        "puntuacion": 7522,
+        "posicion" : 1,
+        "2048": false
+    }
+]
