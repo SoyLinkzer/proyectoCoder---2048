@@ -24,7 +24,8 @@ const LADO = 4;
 //defino variables de usuario
 let puntuacion = 0;
 let usuarioLS = JSON.parse(localStorage.getItem('jugador'));
-let nombreUsuario = usuarioLS != null ? usuarioLS.nombre : 'Default' ;
+console.log(usuarioLS);
+let nombreUsuario = usuarioLS ? usuarioLS.nombre : 'Default' ;
 const dataUsuario = {nombre: nombreUsuario, puntuacion: puntuacion};
 //Defino elementos html
 let pantallaHTML = document.getElementById("pantalla");
@@ -148,8 +149,7 @@ const actualizarPuntuacion = (matriz,elementoHTML)=>{
     let puntosTotales = calcularPuntuacion(matriz);
     elementoHTML.innerText = `Puntuacion: ${puntosTotales}`;
     dataUsuario.puntuacion = puntosTotales;
-    console.log(dataUsuario);
-    guardarLocal(dataUsuario,"jugador");
+    //guardarLocal(dataUsuario,"jugador");
 };
 
 const getRandomInt = (min, max)=>{
@@ -217,13 +217,13 @@ const aparecerRandom = (matriz)=>{
 const actualizarTotal = (matrizAActualizar,elementoHTML)=>{
     actualizarCasillasHTML(matrizAActualizar);
     actualizarPuntuacion(matrizAActualizar,elementoHTML);
-    console.log(isWin(matrizAActualizar));
     if(isWin(mObjetosToMNumeros(matrizAActualizar))){
         mostrarAlertaFin('Ganaste!','Volver a jugar?', 'success');
     }else{
         aparecerRandom(matrizAActualizar);
     }
 };
+
 
 const guardarLocal = (objeto,campo)=>{
     localStorage.setItem(campo, JSON.stringify(objeto));
@@ -242,6 +242,9 @@ const actualizarUsuario = (e)=>{
     //console.log(dataUsuario);
     guardarLocal(dataUsuario,"jugador");
 };
+
+
+/*
 
 const ordenarPorPosicion = (objetosConPocision)=>{
     objetosOrdenados = [];
@@ -270,11 +273,12 @@ const mostrarTop = (elementoHTML)=>{
         });
     } );
 };
+*/
 
 
 /*-----------------------------"Ciclo" de juego-----------------------------*/
 
-if(dataUsuario.nombre !== 'Default'){actualizarUsuario()}
+dataUsuario.nombre !== 'Default' && actualizarUsuario()
 
 let casillasNumAux;
 
@@ -282,12 +286,14 @@ aparecerRandom(casillas);
 aparecerRandom(casillas);
 
 btnUsuarioHTML.addEventListener('click',actualizarUsuario);
+/*
 btnTopHTML.addEventListener('click',()=>{
     listaJugadores = document.createElement('div');
     listaJugadores.innerHTML = `<p text-aling="center"> Top de jugadores</p>`
     footer.appendChild(listaJugadores);
     mostrarTop(listaJugadores);
 });
+*/
 
 document.addEventListener('keydown',(t)=>{
     switch(t.key){
