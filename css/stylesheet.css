@@ -50,13 +50,41 @@ h1{
 #jugador-nombre{
     margin-bottom: 50%;
 }
+.boton-cerrar{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
 .jugadores{
     display: flex;
     justify-content: center;
 }
 footer{
     display: flex;
-    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
     margin-top: 50px;
 }
+.top-jugadores{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-style: solid;
+    margin-top: 5px;
+    border-radius: 10px;
+    width: 50vh;
+    border-color: #838383;
+    background-color: #d4d3d3;
+    color: #838383;
+}
+.top-jugadores h3, .top-jugadores h4, .top-jugadores p{
+    display: flex;
+    align-items: center;
+    margin: 0;
+    height: 30px;
+    color: #838383;
+} 
 

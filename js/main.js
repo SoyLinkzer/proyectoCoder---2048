@@ -26,7 +26,9 @@ let puntuacion = 0;
 let usuarioLS = JSON.parse(localStorage.getItem('jugador'));
 console.log(usuarioLS);
 let nombreUsuario = usuarioLS ? usuarioLS.nombre : 'Default' ;
-const dataUsuario = {nombre: nombreUsuario, puntuacion: puntuacion};
+let dataUsuario = {nombre: nombreUsuario, puntuacion: puntuacion};
+console.log(dataUsuario);
+let topVisible = false;
 //Defino elementos html
 let pantallaHTML = document.getElementById("pantalla");
 let puntuacionHTML = document.getElementById("puntuacion");
@@ -35,6 +37,11 @@ let inputUsuarioHTML = document.getElementById("nombreUsuario")
 let interfazHTML = document.getElementById("interfaz");
 let btnTopHTML = document.getElementById("botonTop");
 let footer = document.getElementById('adicional');
+
+let btnCerrarSes = document.createElement('button');
+btnCerrarSes.innerHTML = "Cerrar sesion";
+btnCerrarSes.className = "boton-cerrar";
+
 //inicializar matriz de casillas
 let casillas = [];
 for(let i = 0; i<LADO; i++){
@@ -191,7 +198,7 @@ const mostrarAlertaFin = (titulo,texto,icono)=>{
         confirmButtonText: 'Si'
       }).then((result) => {
         if (result.isConfirmed) {
-            location.reload()
+            location.reload();
         }
       });
 };
@@ -230,21 +237,17 @@ const guardarLocal = (objeto,campo)=>{
 };
 
 const actualizarUsuario = (e)=>{
-    if(dataUsuario === 'Default'){dataUsuario.nombre = inputUsuarioHTML.value;}
     let parrafoUsuario = document.createElement('p');
     let hrHTML = document.getElementById('separador');
-    dataUsuario.nombre = inputUsuarioHTML.value;
+    if(dataUsuario.nombre === 'Default'){dataUsuario.nombre = inputUsuarioHTML.value;}
     interfazHTML.insertBefore(parrafoUsuario,hrHTML);
-    let value = dataUsuario.nombre;
-    parrafoUsuario.innerHTML = `<div>${value}</div>`;
+    parrafoUsuario.innerHTML = `<div>${dataUsuario.nombre}</div>`;
     inputUsuarioHTML.remove();
     btnUsuarioHTML.remove();
-    //console.log(dataUsuario);
+    interfazHTML.appendChild(btnCerrarSes);
     guardarLocal(dataUsuario,"jugador");
 };
 
-
-/*
 
 const ordenarPorPosicion = (objetosConPocision)=>{
     objetosOrdenados = [];
@@ -257,43 +260,54 @@ const ordenarPorPosicion = (objetosConPocision)=>{
 };
 
 const mostrarTop = (elementoHTML)=>{
-    fetch('/top_jugadores.json')
+    fetch("./js/top_jugadores.json")
     .then(res=> res.json())
     .then( jugadores=>{
         let jugadoresOrdenados = ordenarPorPosicion(jugadores);
         jugadoresOrdenados.forEach(jugador =>{
             const div = document.createElement('div');
-            div = document.className = 
+            div.className = 'top-jugadores';
             div.innerHTML = `
-            <h3>#${jugador.posicion}</h3>
-            <h4>${jugador.jugador}</h4>
+            <h4>#${jugador.posicion}</h4>
+            <h3>${jugador.jugador}</h3>
             <p>${jugador.puntuacion}</p>
             `;
             elementoHTML.append(div);
         });
     } );
 };
-*/
 
 
 /*-----------------------------"Ciclo" de juego-----------------------------*/
 
-dataUsuario.nombre !== 'Default' && actualizarUsuario()
+dataUsuario.nombre !== 'Default' && actualizarUsuario();
+
+btnUsuarioHTML.addEventListener('click',actualizarUsuario);
+btnCerrarSes.addEventListener('click', ()=>{
+    localStorage.removeItem('jugador');
+    location.reload();
+});
 
 let casillasNumAux;
 
 aparecerRandom(casillas);
 aparecerRandom(casillas);
 
-btnUsuarioHTML.addEventListener('click',actualizarUsuario);
-/*
+let listaJugadores = null;
+//Mostrar/cerrar lista con el top de los jugadores
 btnTopHTML.addEventListener('click',()=>{
-    listaJugadores = document.createElement('div');
-    listaJugadores.innerHTML = `<p text-aling="center"> Top de jugadores</p>`
-    footer.appendChild(listaJugadores);
-    mostrarTop(listaJugadores);
+    if(topVisible){
+        listaJugadores.remove();
+        topVisible = false;
+    }else{
+        listaJugadores = document.createElement('div');
+        listaJugadores.innerHTML = `<h2 text-aling="center"> Top de jugadores</h2>`
+        footer.appendChild(listaJugadores);
+        mostrarTop(listaJugadores);
+        topVisible = true;
+    }
 });
-*/
+
 
 document.addEventListener('keydown',(t)=>{
     switch(t.key){
